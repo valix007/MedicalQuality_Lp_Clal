@@ -141,7 +141,8 @@
       }
       /* LTR fields (phone / email / employee number) — keep left-to-right
          typing but pin the gray placeholder + text to the right (RTL form). */
-      .field-glass[dir="ltr"] {
+      .field-glass[dir="ltr"],
+      .field-light[dir="ltr"] {
         text-align: right;
       }
       @media (min-width: 768px) {
@@ -565,7 +566,7 @@
                   </div>
                 </div>
                 <button type="submit" class="btn-rose w-full">
-                  לבדיקת זכאות ולמימוש ההטבה
+                  לבדיקת זכאות ומימוש הטבה
                 </button>
                 <p
                   class="text-[11px] text-cream/55 text-center leading-relaxed"
@@ -2691,19 +2692,23 @@
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label
-                    for="final-form-hmo"
+                    for="final-form-employee"
                     class="block text-xs font-medium mb-1.5 text-ink/70"
-                    >קופת חולים
-                    <span class="text-[10px] font-normal text-ink/45 mr-1"
-                      >(לא חובה)</span
+                    >מספר עובד כלל
+                    <span class="text-[10px] font-normal text-rose-deep mr-1"
+                      >(חובה)</span
                     ></label
-                  ><select id="final-form-hmo" name="hmo" class="field-light">
-                    <option value="" selected="">בחרי קופה</option>
-                    <option value="כללית">כללית</option>
-                    <option value="מכבי">מכבי</option>
-                    <option value="מאוחדת">מאוחדת</option>
-                    <option value="לאומית">לאומית</option>
-                  </select>
+                  ><input
+                    id="final-form-employee"
+                    type="text"
+                    inputmode="numeric"
+                    required=""
+                    maxlength="20"
+                    placeholder="מספר עובד"
+                    class="field-light"
+                    dir="ltr"
+                    name="employee_id"
+                  />
                 </div>
                 <div>
                   <label
@@ -2742,7 +2747,7 @@
                 </div>
               </div>
               <button type="submit" class="btn-rose w-full">
-                לבדיקת זכאות ולמימוש ההטבה ←
+                לבדיקת זכאות ומימוש הטבה
               </button>
               <p class="text-[11px] text-ink/55 text-center leading-relaxed">
                 בלחיצה על הכפתור אני מאשרת לקבל פנייה טלפונית מנציגת Medical
