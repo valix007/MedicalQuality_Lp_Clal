@@ -10,7 +10,7 @@
      Set this to your endpoint (Trackbox webhook / CRM / Apps
      Script URL). Leave '' to just show a success message.
      ---------------------------------------------------------- */
-  var FORM_ENDPOINT = ''; // e.g. 'https://your-crm.example.com/api/lead'
+  var FORM_ENDPOINT = 'https://hooks.zapier.com/hooks/catch/14279784/42p5e2j/'; // Zapier Catch Hook -> bmby CRM
 
   var ready = function (fn) {
     if (document.readyState !== 'loading') fn();
@@ -129,7 +129,6 @@
 
         var done = function (ok) {
           if (ok) {
-            if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch (e) {} }
             form.innerHTML =
               '<div style="text-align:center;padding:28px 12px">' +
               '<div style="font-size:42px;line-height:1">✓</div>' +
@@ -143,10 +142,14 @@
         };
 
         if (FORM_ENDPOINT) {
+          // Sent as form-urlencoded: a CORS "simple request" (no preflight),
+          // and Zapier's Catch Hook maps each field automatically.
           fetch(FORM_ENDPOINT, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams(data).toString()
           }).then(function (r) { done(r.ok); }).catch(function () { done(false); });
         } else {
           // no endpoint configured yet — simulate success
