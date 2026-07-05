@@ -122,6 +122,17 @@
           alert('נא למלא שם, טלפון ואימייל');
           return;
         }
+        // phone: Israeli mobile — local 05XXXXXXXX (10 digits) or
+        // international +972 5XXXXXXXX (12 digits). Normalize intl -> local.
+        var phoneDigits = data.phone.replace(/\D/g, '');
+        if (/^9725\d{8}$/.test(phoneDigits)) {
+          phoneDigits = '0' + phoneDigits.slice(3);
+        }
+        if (!/^05\d{8}$/.test(phoneDigits)) {
+          alert('נא להזין מספר טלפון תקין: 10 ספרות המתחיל ב-05 (או +972)');
+          return;
+        }
+        data.phone = phoneDigits;
         data.source = 'clal-benefit-lp';
         var btn = form.querySelector('button[type="submit"], button:not([type])');
         var label = btn ? btn.innerHTML : '';
