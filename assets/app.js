@@ -172,14 +172,31 @@
     handleForm(document.getElementById('hero-form'));
     handleForm(document.getElementById('final-form'));
 
-    /* ---------- 7. "השאירי פרטים" buttons scroll to form ---- */
+    /* ---------- 7. CTA buttons scroll to the nearest lead form ---- */
+    var CTA_RE = /השאיר|לבדיקת זכאות|מימוש ה?הטבה|דברי איתנו/;
     document.querySelectorAll('button').forEach(function (b) {
-      if (/השאיר/.test(b.textContent) && !b.closest('form')) {
-        b.addEventListener('click', function () {
-          var t = document.getElementById('hero-form') || document.getElementById('top');
-          if (t) t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // skip real form-submit buttons (inside a <form>)
+      if (!CTA_RE.test(b.textContent) || b.closest('form')) return;
+      b.addEventListener('click', function () {
+        var forms = [
+          document.getElementById('hero-form'),
+          document.getElementById('final-form')
+        ].filter(Boolean);
+        if (!forms.length) {
+          var top = document.getElementById('top');
+          if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        var by = b.getBoundingClientRect().top + window.pageYOffset;
+        var target = forms.reduce(function (best, f) {
+          var fp = f.getBoundingClientRect().top + window.pageYOffset;
+          var bp = best.getBoundingClientRect().top + window.pageYOffset;
+          return Math.abs(fp - by) < Math.abs(bp - by) ? f : best;
         });
-      }
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var input = target.querySelector('input, select');
+        if (input) setTimeout(function () { try { input.focus({ preventScroll: true }); } catch (e) {} }, 600);
+      });
     });
 
   });
